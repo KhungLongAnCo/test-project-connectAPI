@@ -1,26 +1,48 @@
-import React from 'react';
-import logo from './logo.svg';
+import React, { Component } from 'react';
 import './App.css';
+import Menu from './components/menu/menu';
+import ProductList from './components/ProductList/ProductList';
+import routes from './route';
+import {Route, BrowserRouter as Router, Switch} from 'react-router-dom';
+class App extends Component {
+  render() {
+    return (
+      <Router>
+        <div>
+        <Menu />
+        <div className='container'>
+          {/* <div className="row">
+            <div className="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+              <button type="button" className="btn btn-success">+ Thêm công viêc</button>
+            </div>
+          </div>
+          <ProductList /> */}
+          {this.showContent(routes)}
+        </div>
+      </div>
+      </Router>
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+
+
+
+    );
+  }
+  showContent(routes){
+    let result = null;
+    if(routes.length >0){
+      result = routes.map((route, index)=>{
+        return(
+          <Route key={index} 
+          path={route.path} 
+          exact ={route.exact}
+          component={route.main}
+           />
+        )
+      })
+    }
+    return <Switch>{result}</Switch> ;
+  }
+
 }
 
 export default App;
