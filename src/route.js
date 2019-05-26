@@ -1,16 +1,33 @@
-import React, {Component} from 'react';
+import React from 'react';
 import HomePages from './pages/HomePages/HomePages';
 import NotFound from './pages/NotFoundPages/NotFoundPages';
+import ProductListPage from './pages/ProductListPages/ProductListPage';
+import ProductActionPages from './pages/ProductActionPages/ProductActionPage';
 
 const Route = [
     {
-        path:'/',
+        path: '/',
         exact: true,
         main: () => <HomePages />
     },
     {
-        path:'',
-        exact:true,
+        path: '/products-list',
+        exact: true,
+        main: () => <ProductListPage />
+    },
+    {
+        path: '/products/add',
+        exact: false,
+        main: () => <ProductActionPages />
+    },
+    {
+        path:'/products/:id/edit',
+        exact:false,
+        main: () => <ProductActionPages />
+    },
+    {
+        path: '',
+        exact: true,
         main: () => <NotFound />
     }
 ];
