@@ -3,10 +3,26 @@ import ProductItem from '../../components/productItem/ProductItem';
 import ProductList from '../../components/ProductList/ProductList';
 import { NavLink } from 'react-router-dom';
 import { connect } from 'react-redux';
+import callAPI from './../../utils/apiCaller';
+
 
 class ProductListPage extends Component {
+  constructor(props){
+    super(props);
+    this.state={
+      products:''
+    }
+  }
+  componentDidMount(){
+    callAPI('products','GET', null)
+    .then(res =>{
+      this.setState({
+        products:res.data
+      })
+    })
+  }
   render() {
-    let { products } = this.props;
+    let products = this.state.products;
     return (
       <div>
         <div className="row">
@@ -41,7 +57,7 @@ class ProductListPage extends Component {
 }
 const mapStateToProps = (state) => {
   return {
-    products: state.products
+    // products: state.products
   }
 }
 
