@@ -3,26 +3,26 @@ import ProductItem from '../../components/productItem/ProductItem';
 import ProductList from '../../components/ProductList/ProductList';
 import { NavLink } from 'react-router-dom';
 import { connect } from 'react-redux';
-import callAPI from './../../utils/apiCaller';
-
+import { FetchAllProducts, DeleteProductRequest } from '../../actions/index';
 
 class ProductListPage extends Component {
-  constructor(props){
-    super(props);
-    this.state={
-      products:''
-    }
+  componentDidMount() {
+    this.props.FetchAllProducts();
   }
-  componentDidMount(){
-    callAPI('products','GET', null)
-    .then(res =>{
-      this.setState({
-        products:res.data
-      })
-    })
+  findIndex = (id, products) => {
+    let result = null;
+    products.forEach((product, index) => {
+      if (product.id === id) {
+        result = index;
+      }
+    });
+    return result;
+  }
+  deleteProduct = (id) => {
+    this.props.DeleteProduct(id);
   }
   render() {
-    let products = this.state.products;
+    let products = this.props.products;
     return (
       <div>
         <div className="row">
@@ -46,6 +46,7 @@ class ProductListPage extends Component {
     if (products.length > 0) {
       result = products.map((product, index) => {
         return <ProductItem
+          deleteProduct={this.deleteProduct}
           key={index}
           index={index}
           product={product} />
@@ -57,8 +58,18 @@ class ProductListPage extends Component {
 }
 const mapStateToProps = (state) => {
   return {
-    // products: state.products
+    products: state.products
+  }
+}
+const mapDispatchToProps = (dispatch, props) => {
+  return {
+    FetchAllProducts: () => {
+      dispatch(FetchAllProducts(dispatch));
+    },
+    DeleteProduct: (id) => {
+      dispatch(DeleteProductRequest(id));
+    }
   }
 }
 
-export default connect(mapStateToProps, null)(ProductListPage);
+export default connect(mapStateToProps, mapDispatchToProps)(ProductListPage);
